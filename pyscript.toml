@@ -1,2 +1,2 @@
-name = "Hello World Copy"
-description = "Basic hello world example that displays text in a page with PyScript."
+name = "Bed Occupancy Rate Tracker"
+description = "Tracks the BOR in Singapore public hospitals by retrieving a csv file from MOH statistics page"

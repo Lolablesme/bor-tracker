@@ -9,7 +9,7 @@
         <!-- PyScript CSS -->
         <link rel="stylesheet" href="https://pyscript.net/releases/2025.8.1/core.css">
         <!-- CSS for examples -->
-        <link rel="stylesheet" href="./assets/css/examples.css" />
+        <link rel="stylesheet" href="assets/css/style.css" />
 
         <!-- This script tag bootstraps PyScript -->
         <script type="module" src="https://pyscript.net/releases/2025.8.1/core.js"></script>
@@ -24,7 +24,7 @@
             loading.showModal();
         </script>
 
-        <title>PyScript Hello World</title>
+        <title>BOR Tracker</title>
         <link rel="icon" type="image/png" href="./assets/favicon.png" />
     </head>
 
@@ -35,22 +35,35 @@
 
         <nav class="navbar" style="background-color: #000000">
             <div class="app-header">
-                <a href="/">
-                    <img src="./assets/logo.png" class="logo" />
-                </a>
-                <a class="title" href="" style="color: #f0ab3c">Hello World</a>
+                <a class="title" href="/" style="color: #f0ab3c"><strong>Bed Occupancy Rate (Singapore)</strong></a>
             </div>
         </nav>
 
-        <section class="pyscript">
-            Hello world! <br />
-            This is the current date and time, as computed by Python:
-            <script type="py">
-                from pyscript import display
-                from datetime import datetime
-                now = datetime.now()
-                display(now.strftime("%m/%d/%Y, %H:%M:%S"))
-            </script>
-        </section>
+        <main>
+            <section class="pyscript">
+                Hello world! <br/>
+                This is the current date and time, as computed by Python:
+                <script type="py">
+                    from pyscript import display
+                    from datetime import datetime
+                    now = datetime.now()
+                    display(now.strftime("%m/%d/%Y, %H:%M:%S"))
+                </script>
+            </section>
+        </main>
+
+        <div class="wrapper-footer">
+            <div class="container">
+                <footer id="footer">
+                </footer>
+                <script>
+                    fetch('includes/svg-icons.html')
+                         .then(response => response.text())
+                         .then(data => {
+                           document.getElementById('footer').innerHTML = data;
+                         });
+                </script>
+            </div>
+        </div>
     </body>
 </html>
