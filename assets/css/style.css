@@ -1,26 +1,86 @@
+:root {
+// Grays
+--black: #000;
+--darkerGray: #222;
+--darkGray: #333;
+--gray: #666;
+--lightGray: #eee;
+--white: #fff;
+
+--opensans: "Open Sans", sans-serif;
+}
+
 body {
-    margin: 0;
+	background: var(--white);
+    font: 17px var(--opensans);
+    color: var(--darkGray);
+    font-weight: 400;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    margin: 0
 }
 
 main {
     flex: 1;
-    display: flex;
-    margin: 0px 10%;
+    #border: 5px solid red;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    color: var(--darkGray);
+    font-family: var(--opensans)
+    font-weight: bold;
+
+    line-height: 1.7;
+    margin: 1em 0 15px;
+    padding: 0;
+
+    @include mobile {
+        line-height: 1.4;
+    }
+}
+
+h1 {
+    font-size: 26px;
+    a {
+        color: inherit;
+    }
+}
+
+h2 {
+    font-size: 22px;
+}
+
+h3 {
+    font-size: 18px;
+    margin: 15px 0 5px 0;
+}
+
+h4 {
+    font-size: 16px;
+    color: var(--gray);
+}
+
+p {
+    margin: 10px 0;
+}
+
+a {
+    font-family: var(--opensans);
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    &:hover, &:active {
+        color: $blue;
+    }
+}
 
 .pyscript {
     margin: 0.5rem;
 }
 
 html {
-    font-family:
-        "Open Sans", sans-serif;
-    line-height: 1.7;
-    margin: 1em 0 15px;
+    font-size: 100%;
 }
 
 nav {
@@ -67,7 +127,7 @@ nav {
   margin-top: 50px;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
-  background-color: $lightGray;
+  background-color: var(--lightGray);
   flex-shrink: 0;
 }
 
