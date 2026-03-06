@@ -1,6 +1,4 @@
 from pyscript import display
-from codecs import ignore_errors
-
 from bs4 import BeautifulSoup
 import os
 import pandas as pd
@@ -21,6 +19,21 @@ filename_csv = "Bed_Occupancy_Rate.csv"
 def delete_file(filename):
     if os.path.exists(filename):
         os.remove(filename)
+# ======================
+hospitals = ['AH', 'CGH', 'KTPH', 'NTFGH', 'NUH(A)', 'SGH', 'SKH', 'TTSH', 'WH']
+hospital_colours = {
+    "AH"        : "#1f77b4", # Deep Blue
+    "CGH"       : "#ff7f0e", # Safety Orange
+    "KTPH"      : "#2ca02c", # Emerald Green
+    "NTFGH"     : "#d62728", # Crimson Red
+    "NUH(A)"    : "#9467bd", # Royal Purple
+    "SGH"       : "#8c564b", # Cedar Brown
+    "SKH"       : "#e377c2", # Pink Magenta
+    "TTSH"      : "#17becf", # Bright Teal
+    "WH"        : "#bcbd22", # Olive Gold
+    "Average"   : "#595959"  # Dark Gray
+}
+# ======================
 
 page = requests.get(url, headers=headers).text
 doc = BeautifulSoup(page, "html.parser")
@@ -62,7 +75,6 @@ delete_file(filename_xlsx)
 delete_file(filename_csv)
 
 # Plot the graphs
-hospitals = ['AH', 'CGH', 'KTPH', 'NTFGH', 'NUH(A)', 'SGH', 'SKH', 'TTSH', 'WH']
 
 for col in hospitals:
     if data_csv[col].dtype == "float64":
@@ -74,23 +86,40 @@ data_csv['Date'] = pd.to_datetime(data_csv['Date'], errors='coerce')
 print(data_csv.head())
 print(data_csv.tail())
 
-plt_main = px.line(data_csv, x="Date", y=hospitals+['Average'],
-                   title="Hospital Bed Occupancy Trends",
-                   labels={"value": "Occupancy Rate(%)", "variable": "Hospital"}
-                   )
+plots=[]
 
+# All hospitals
+plt_main = px.line(data_csv, x="Date", y=hospitals + ['Average'],
+                   title="Hospital Bed Occupancy Trends (All Hospitals)",
+                   labels={"value": "Occupancy Rate(%)", "variable": "Hospital"},
+                   color_discrete_map=hospital_colours,
+                   render_mode='svg'
+                   )
 plt_main.update_layout(yaxis=dict(range=[0,100], ticksuffix="%"),
                        hovermode="x unified")
+plt_main.update_traces(hovertemplate="<br>Date=%{x|%Y-%m-%d}<br>Occupancy=%{y}", opacity=0.5)
+plots.append(plt_main)
+# plt_main.show()
 
-plt_main.update_traces(hovertemplate="Hospital=%{fullData.name}<br>Date=%{x|%Y-%m-%d}<br>Occupancy=%{y}%")
-
-plt_main.show()
+for hospital in hospitals:
+    plt_hospital = px.line(data_csv, x="Date", y=[hospital] + ['Average'],
+                        title=f"Hospital Bed Occupancy Trends ({hospital})",
+                        labels={"value": "Occupancy Rate(%)", "variable": "Hospital"},
+                        color_discrete_map=hospital_colours,
+                        render_mode='svg'
+                       )
+    plt_hospital.update_layout(yaxis=dict(range=[0, 100], ticksuffix="%"),
+                           hovermode="x unified")
+    plt_hospital.update_traces(hovertemplate="<br>Date=%{x|%Y-%m-%d}<br>Occupancy=%{y}", opacity=0.5)
+    plots.append(plt_hospital)
+    # plt_hospital.show()
 
 try:
     data_csv['Date'] = pd.to_datetime(data_csv['Date'])
     display(f"Last update on: {data_csv['Date'].iloc[-1].strftime('%Y-%m-%d')}", target="script-area")
 
-    display(plt_main, target="script-area")
+    for plot in plots:
+        display(plot, target="script-area")
 
 finally:
     loading_dialog = js.document.getElementById('loading')
